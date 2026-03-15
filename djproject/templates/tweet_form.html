@@ -1,25 +1,59 @@
-{%  extends "layout.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
-Django Project
-{% endblock  %}
+Tweet List
+{% endblock %}
 
 {% block content %}
-<h1 class="text-center mt-4">Welcome to Django's Project</h1>
-<h2>
-    {% if form.instance.pk %} 
-    Edit Tweet 
-    {% else %} Create Tweet 
-    {% endif %}  
-    {% comment %} Create a Form in Django {% endcomment %}
-    <form method="post" enctype="multipart/form-data" class="form">
-        {% comment %} CSRF Token {% endcomment %}
-       {% csrf_token %}
-     {{ form.as_p }}
-     <button class="btn btn-warning" type="submit">
-        Submit!
-     </button>
-     <a href="{% url 'tweet_list' %}">Back To Tweet List</a>
-    </form>
-</h2>
-{% endblock  %}
+
+<div class="container mt-4">
+
+<h1 class="text-center mb-4">Tweet Feed</h1>
+
+<a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">
+Create Tweet
+</a>
+
+<div class="row g-4">
+
+{% for tweet in tweets %}
+
+<div class="col-md-4 col-sm-6">
+    <div class="card shadow-sm h-100">
+
+        <img src="{{ tweet.photo.url }}" 
+             class="card-img-top img-fluid"
+             style="height:220px; object-fit:cover;">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                {{ tweet.user.username }}
+            </h5>
+
+            <p class="card-text">
+                {{ tweet.text }}
+            </p>
+
+            <a href="{% url 'tweet_edit' tweet.id %}" 
+               class="btn btn-sm btn-warning">
+               Edit
+            </a>
+
+            <a href="{% url 'tweet_delete' tweet.id %}" 
+               class="btn btn-sm btn-danger">
+               Delete
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}
